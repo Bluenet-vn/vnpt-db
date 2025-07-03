@@ -117,3 +117,27 @@ ALTER TABLE role_has_permissions
 ALTER TABLE user_has_roles
   ADD CONSTRAINT fk_user_has_roles_user_id FOREIGN KEY (user_id) REFERENCES users(id),
   ADD CONSTRAINT fk_user_has_roles_role_id FOREIGN KEY (role_id) REFERENCES roles(id);
+
+
+-- =============================================
+-- BẢNG LOẠI DỊCH VỤ PHỤC VỤ KHÁCH HÀNG
+-- =============================================
+CREATE TABLE service_types (
+  id BIGSERIAL PRIMARY KEY,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
+  deleted_at TIMESTAMP NULL,
+  name VARCHAR(255) NOT NULL,
+  code VARCHAR(100) NOT NULL,
+  description TEXT DEFAULT NULL,
+  icon VARCHAR(255) DEFAULT NULL,
+  display_order INTEGER DEFAULT 0,
+  is_active BOOLEAN DEFAULT TRUE,
+  metadata JSONB DEFAULT NULL
+);
+
+-- Tạo các indexes cho bảng service_types
+CREATE INDEX idx_service_types_name ON service_types(name);
+CREATE INDEX idx_service_types_code ON service_types(code);
+CREATE INDEX idx_service_types_is_active ON service_types(is_active);
+CREATE INDEX idx_service_types_deleted_at ON service_types(deleted_at);
