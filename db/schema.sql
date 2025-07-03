@@ -2,7 +2,7 @@
 -- BẢNG NGƯỜI DÙNG
 -- =============================================
 CREATE TABLE users (
-  id BIGINT UNSIGNED PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP NULL,
@@ -32,7 +32,7 @@ CREATE INDEX idx_users_deleted_at ON users(deleted_at);
 -- BẢNG VAI TRÒ
 -- =============================================
 CREATE TABLE roles (
-  id BIGINT UNSIGNED PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP NULL,
@@ -50,7 +50,7 @@ CREATE INDEX idx_roles_deleted_at ON roles(deleted_at);
 -- BẢNG QUYỀN HẠN
 -- =============================================
 CREATE TABLE permissions (
-  id BIGINT UNSIGNED PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP NULL,
@@ -70,12 +70,12 @@ CREATE INDEX idx_permissions_deleted_at ON permissions(deleted_at);
 -- BẢNG LIÊN KẾT VAI TRÒ - QUYỀN HẠN
 -- =============================================
 CREATE TABLE role_has_permissions (
-  id BIGINT UNSIGNED PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP NULL,
-  role_id INT DEFAULT NULL,
-  permission_id INT DEFAULT NULL
+  role_id BIGINT DEFAULT NULL,
+  permission_id BIGINT DEFAULT NULL
 );
 
 -- Tạo các indexes cho bảng role_has_permissions
@@ -87,12 +87,12 @@ CREATE INDEX idx_role_has_permissions_deleted_at ON role_has_permissions(deleted
 -- BẢNG LIÊN KẾT NGƯỜI DÙNG - VAI TRÒ
 -- =============================================
 CREATE TABLE user_has_roles (
-  id BIGINT UNSIGNED PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP NULL,
-  user_id INT DEFAULT NULL,
-  role_id INT DEFAULT NULL
+  user_id BIGINT DEFAULT NULL,
+  role_id BIGINT DEFAULT NULL
 );
 
 -- Tạo các indexes cho bảng user_has_roles
