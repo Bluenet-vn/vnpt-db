@@ -3,8 +3,8 @@
 -- =============================================
 CREATE TABLE users (
   id BIGSERIAL PRIMARY KEY,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
   deleted_at TIMESTAMP NULL,
   name VARCHAR(255) DEFAULT NULL,
   username VARCHAR(255) DEFAULT NULL,
@@ -33,8 +33,8 @@ CREATE INDEX idx_users_deleted_at ON users(deleted_at);
 -- =============================================
 CREATE TABLE roles (
   id BIGSERIAL PRIMARY KEY,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
   deleted_at TIMESTAMP NULL,
   name VARCHAR(255) DEFAULT NULL,
   code VARCHAR(255) DEFAULT NULL,
@@ -51,8 +51,8 @@ CREATE INDEX idx_roles_deleted_at ON roles(deleted_at);
 -- =============================================
 CREATE TABLE permissions (
   id BIGSERIAL PRIMARY KEY,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
   deleted_at TIMESTAMP NULL,
   module VARCHAR(255) DEFAULT NULL,
   name VARCHAR(255) DEFAULT NULL,
@@ -71,8 +71,8 @@ CREATE INDEX idx_permissions_deleted_at ON permissions(deleted_at);
 -- =============================================
 CREATE TABLE role_has_permissions (
   id BIGSERIAL PRIMARY KEY,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
   deleted_at TIMESTAMP NULL,
   role_id BIGINT DEFAULT NULL,
   permission_id BIGINT DEFAULT NULL
@@ -88,8 +88,8 @@ CREATE INDEX idx_role_has_permissions_deleted_at ON role_has_permissions(deleted
 -- =============================================
 CREATE TABLE user_has_roles (
   id BIGSERIAL PRIMARY KEY,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
   deleted_at TIMESTAMP NULL,
   user_id BIGINT DEFAULT NULL,
   role_id BIGINT DEFAULT NULL
