@@ -141,3 +141,38 @@ CREATE INDEX idx_service_types_name ON service_types(name);
 CREATE INDEX idx_service_types_code ON service_types(code);
 CREATE INDEX idx_service_types_is_active ON service_types(is_active);
 CREATE INDEX idx_service_types_deleted_at ON service_types(deleted_at);
+
+-- =============================================
+-- BẢNG FORM DỊCH VỤ
+-- =============================================
+CREATE TABLE service_forms (
+  id BIGSERIAL PRIMARY KEY,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
+  deleted_at TIMESTAMP NULL,
+  service_type_id BIGINT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  description TEXT DEFAULT NULL,
+  form_fields JSONB NOT NULL,
+  form_data JSONB DEFAULT NULL,
+  status VARCHAR(50) DEFAULT 'active',
+  user_id UUID DEFAULT NULL,
+  submitted_at TIMESTAMP DEFAULT NULL,
+  processed_at TIMESTAMP DEFAULT NULL,
+  processed_by UUID DEFAULT NULL,
+  notes TEXT DEFAULT NULL,
+  metadata JSONB DEFAULT NULL
+);
+
+-- Tạo các indexes cho bảng service_forms
+CREATE INDEX idx_service_forms_service_type_id ON service_forms(service_type_id);
+CREATE INDEX idx_service_forms_user_id ON service_forms(user_id);
+CREATE INDEX idx_service_forms_status ON service_forms(status);
+CREATE INDEX idx_service_forms_submitted_at ON service_forms(submitted_at);
+CREATE INDEX idx_service_forms_deleted_at ON service_forms(deleted_at);
+
+-- Ràng buộc khóa ngoại cho bảng service_forms
+ALTER TABLE service_forms
+  ADD CONSTRAINT fk_service_forms_service_type_id FOREIGN KEY (service_type_id) REFERENCES service_types(id),
+  ADD CONSTRAINT fk_service_forms_user_id FOREIGN KEY (user_id) REFERENCES users(id),
+  ADD CONSTRAINT fk_service_forms_processed_by FOREIGN KEY (processed_by) REFERENCES users(id);
