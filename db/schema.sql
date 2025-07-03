@@ -1,8 +1,13 @@
 -- =============================================
+-- Kích hoạt extension UUID
+-- =============================================
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- =============================================
 -- BẢNG NGƯỜI DÙNG
 -- =============================================
 CREATE TABLE users (
-  id BIGSERIAL PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW(),
   deleted_at TIMESTAMP NULL,
@@ -91,7 +96,7 @@ CREATE TABLE user_has_roles (
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW(),
   deleted_at TIMESTAMP NULL,
-  user_id BIGINT DEFAULT NULL,
+  user_id UUID DEFAULT NULL,
   role_id BIGINT DEFAULT NULL
 );
 
