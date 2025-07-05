@@ -138,7 +138,7 @@ CREATE TABLE service_forms (
 );
 
 CREATE TABLE store (
-  "id" int4 NOT NULL DEFAULT nextval('store_id_seq'::regclass),
+  "id" BIGSERIAL NOT NULL DEFAULT nextval('store_id_seq'::regclass),
   "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
   "code" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
   "address" varchar(255) COLLATE "pg_catalog"."default",
@@ -147,20 +147,20 @@ CREATE TABLE store (
   "city" varchar(100) COLLATE "pg_catalog"."default",
   "country" varchar(100) COLLATE "pg_catalog"."default" DEFAULT 'Vietnam'::character varying,
   "token" varchar(255) COLLATE "pg_catalog"."default",
-  "user_id" int4,
+  "user_id" BIGINT,
   "status" varchar(50) COLLATE "pg_catalog"."default" DEFAULT 'active'::character varying,
   "created_at" timestamp(6) DEFAULT CURRENT_TIMESTAMP,
   "updated_at" timestamp(6),
-  "created_by" int4,
-  "updated_by" int4
+  "created_by" BIGINT,
+  "updated_by" BIGINT
 );
 
 CREATE TABLE queue_tickets (
-  "id" int4 NOT NULL DEFAULT nextval('queue_tickets_id_seq'::regclass),
-  "customer_id" int4 NOT NULL,
-  "store_id" int4 NOT NULL,
-  "queue_number" int4 NOT NULL,
-  "service_id" int4,
+  "id" BIGSERIAL NOT NULL DEFAULT nextval('queue_tickets_id_seq'::regclass),
+  "customer_id" BIGINT NOT NULL,
+  "store_id" BIGINT NOT NULL,
+  "queue_number" BIGINT NOT NULL,
+  "service_id" BIGINT,
   "check_in" timestamp(6) DEFAULT CURRENT_TIMESTAMP,
   "called_at" timestamp(6),
   "served_at" timestamp(6),
@@ -170,8 +170,8 @@ CREATE TABLE queue_tickets (
   "created_at" timestamp(6) DEFAULT CURRENT_TIMESTAMP,
   "updated_at" timestamp(6),
   "deleted_at" timestamp(6),
-  "created_by" int4,
-  "updated_by" int4
+  "created_by" BIGINT,
+  "updated_by" BIGINT
 );
 
 
