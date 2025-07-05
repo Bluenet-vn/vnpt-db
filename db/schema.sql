@@ -137,6 +137,44 @@ CREATE TABLE service_forms (
   metadata JSONB NULL
 );
 
+CREATE TABLE store (
+  "id" int4 NOT NULL DEFAULT nextval('store_id_seq'::regclass),
+  "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
+  "code" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+  "address" varchar(255) COLLATE "pg_catalog"."default",
+  "ward" varchar(100) COLLATE "pg_catalog"."default",
+  "district" varchar(100) COLLATE "pg_catalog"."default",
+  "city" varchar(100) COLLATE "pg_catalog"."default",
+  "country" varchar(100) COLLATE "pg_catalog"."default" DEFAULT 'Vietnam'::character varying,
+  "token" varchar(255) COLLATE "pg_catalog"."default",
+  "user_id" int4,
+  "status" varchar(50) COLLATE "pg_catalog"."default" DEFAULT 'active'::character varying,
+  "created_at" timestamp(6) DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" timestamp(6),
+  "created_by" int4,
+  "updated_by" int4
+);
+
+CREATE TABLE queue_tickets (
+  "id" int4 NOT NULL DEFAULT nextval('queue_tickets_id_seq'::regclass),
+  "customer_id" int4 NOT NULL,
+  "store_id" int4 NOT NULL,
+  "queue_number" int4 NOT NULL,
+  "service_id" int4,
+  "check_in" timestamp(6) DEFAULT CURRENT_TIMESTAMP,
+  "called_at" timestamp(6),
+  "served_at" timestamp(6),
+  "finished_at" timestamp(6),
+  "status" varchar(50) COLLATE "pg_catalog"."default" DEFAULT 'waiting'::character varying,
+  "note" text COLLATE "pg_catalog"."default",
+  "created_at" timestamp(6) DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" timestamp(6),
+  "deleted_at" timestamp(6),
+  "created_by" int4,
+  "updated_by" int4
+);
+
+
 -- =============================================
 -- INDEXES
 -- =============================================
@@ -196,6 +234,28 @@ CREATE INDEX idx_service_forms_submitted_at ON service_forms(submitted_at);
 CREATE INDEX idx_service_forms_processed_by ON service_forms(processed_by);
 CREATE INDEX idx_service_forms_deleted_at ON service_forms(deleted_at);
 
+-- Indexes cho bảng store
+CREATE UNIQUE INDEX idx_store_code ON store(code) WHERE deleted_at IS NULL;
+CREATE INDEX idx_store_name ON store(name);
+CREATE INDEX idx_store_ward ON store(ward);
+CREATE INDEX idx_store_district ON store(district);
+CREATE INDEX idx_store_city ON store(city);
+CREATE INDEX idx_store_country ON store(country);
+CREATE INDEX idx_store_token ON store(token);
+CREATE INDEX idx_store_user_id ON store(user_id);
+CREATE INDEX idx_store_status ON store(status);
+
+-- Indexes cho bảng queue_tickets
+CREATE INDEX idx_queue_tickets_customer_id ON queue_tickets(customer_id);
+CREATE INDEX idx_queue_tickets_store_id ON queue_tickets(store_id);
+CREATE INDEX idx_queue_tickets_queue_number ON queue_tickets(queue_number);
+CREATE INDEX idx_queue_tickets_service_id ON queue_tickets(service_id);
+CREATE INDEX idx_queue_tickets_check_in ON queue_tickets(check_in);
+CREATE INDEX idx_queue_tickets_called_at ON queue_tickets(called_at); 
+CREATE INDEX idx_queue_tickets_served_at ON queue_tickets(served_at);
+CREATE INDEX idx_queue_tickets_finished_at ON queue_tickets(finished_at);
+CREATE INDEX idx_queue_tickets_status ON queue_tickets(status);
+
 -- =============================================
 -- RÀNG BUỘC KHÓA NGOẠI
 -- =============================================
@@ -219,3 +279,12 @@ ALTER TABLE service_forms
   ADD CONSTRAINT fk_service_forms_service_supplier_id FOREIGN KEY (service_supplier_id) REFERENCES service_suppliers(id),
   ADD CONSTRAINT fk_service_forms_user_id FOREIGN KEY (user_id) REFERENCES users(id),
   ADD CONSTRAINT fk_service_forms_processed_by FOREIGN KEY (processed_by) REFERENCES users(id);
+
+-- Ràng buộc cho bảng store
+ALTER TABLE store
+  ADD CONSTRAINT fk_store_user_id FOREIGN KEY (user_id) REFERENCES users(id);
+-- Ràng buộc cho bảng queue_tickets
+ALTER TABLE queue_tickets
+  ADD CONSTRAINT fk_queue_tickets_customer_id FOREIGN KEY (customer_id) REFERENCES users(id),
+  ADD CONSTRAINT fk_queue_tickets_store_id FOREIGN KEY (store_id) REFERENCES store(id),
+  ADD CONSTRAINT fk_queue_tickets_service_id FOREIGN KEY (service_id) REFERENCES service_types(id);
