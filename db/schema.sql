@@ -138,6 +138,23 @@ CREATE TABLE service_forms (
 );
 
 -- =============================================
+-- BẢNG PHẢN HỒI DỊCH VỤ
+-- =============================================
+CREATE TABLE feedbacks (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  deleted_at TIMESTAMP NULL,
+  user_id UUID NOT NULL,
+  service_form_id BIGINT NOT NULL,
+  store_id BIGINT NULL,
+  form_data JSONB NULL,
+  rating INTEGER NOT NULL,
+  notes TEXT NULL,
+  metadata JSONB NULL
+);
+
+-- =============================================
 -- INDEXES
 -- =============================================
 -- Indexes cho bảng users
@@ -196,6 +213,14 @@ CREATE INDEX idx_service_forms_submitted_at ON service_forms(submitted_at);
 CREATE INDEX idx_service_forms_processed_by ON service_forms(processed_by);
 CREATE INDEX idx_service_forms_deleted_at ON service_forms(deleted_at);
 
+-- Indexes cho bảng feedbacks
+CREATE INDEX idx_feedbacks_user_id ON feedbacks(user_id);
+CREATE INDEX idx_feedbacks_service_form_id ON feedbacks(service_form_id);
+CREATE INDEX idx_feedbacks_store_id ON feedbacks(store_id);
+CREATE INDEX idx_feedbacks_rating ON feedbacks(rating);
+CREATE INDEX idx_feedbacks_status ON feedbacks(status);
+CREATE INDEX idx_feedbacks_deleted_at ON feedbacks(deleted_at);
+
 -- =============================================
 -- RÀNG BUỘC KHÓA NGOẠI
 -- =============================================
@@ -219,3 +244,8 @@ ALTER TABLE service_forms
   ADD CONSTRAINT fk_service_forms_service_supplier_id FOREIGN KEY (service_supplier_id) REFERENCES service_suppliers(id),
   ADD CONSTRAINT fk_service_forms_user_id FOREIGN KEY (user_id) REFERENCES users(id),
   ADD CONSTRAINT fk_service_forms_processed_by FOREIGN KEY (processed_by) REFERENCES users(id);
+
+-- Ràng buộc cho bảng feedbacks
+ALTER TABLE feedbacks
+  ADD CONSTRAINT fk_feedbacks_user_id FOREIGN KEY (user_id) REFERENCES users(id),
+  ADD CONSTRAINT fk_feedbacks_service_form_id FOREIGN KEY (service_form_id) REFERENCES service_forms(id);
